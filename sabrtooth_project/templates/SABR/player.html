@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SABRtooth</title>
+    </head>
+
+    <body>
+        <h1>Welcome</h1>
+        
+        <h2>{{ player.namefirst }} {{ player.namelast }} </h2>
+
+        
+        
+        {% if battinglines %}
+            <ul>
+                {% for line in battinglines %}
+                <li>{{ line.yearid }} {{line.teamid}} {{line.ab}} {{line.r}} {{line.h}} {{line.2b}} {{line.3b}} {{line.hr}}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no players present.</strong>
+        {% endif %}
+
+        <a href="/sabr/about/">About</a>
+    </body>
+</html>

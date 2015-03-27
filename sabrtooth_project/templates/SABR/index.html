@@ -7,20 +7,22 @@
     <body>
         <h1>Welcome</h1>
         
-        <h2>{{ player.namefirst }} {{ player.namelast }} </h2>
-
+        <h2>Player Search</h2>
         
-        
-        {% if battinglines %}
-            <ul>
-                {% for line in battinglines %}
-                <li>{{ line.yearid }} {{line.teamid}} {{line.ab}} {{line.r}} {{line.h}} {{line.2b}} {{line.3b}} {{line.hr}}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no players present.</strong>
-        {% endif %}
+        <form id="batting_form" method="post" action="{% url 'index' %}">
 
-        <a href="/sabr/about/">About</a>
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+
+            <input type="submit" name="submit" value="Search Player" />
+        </form>
     </body>
 </html>

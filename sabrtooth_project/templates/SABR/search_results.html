@@ -1,0 +1,12 @@
+<p>You searched for: <strong>{{ query }}</strong></p>
+
+{% if players %}
+    <p>Found {{ palyers|length }} player{{ players|pluralize }}.</p>
+    <ul>
+        {% for player in players %}
+        <li><a href='/sabr/player/{{ player.playerid }}'>{{ player.namefirst }} {{ player.namelast }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No Players matched your search criteria.</p>
+{% endif %}
