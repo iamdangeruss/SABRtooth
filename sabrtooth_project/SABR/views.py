@@ -30,18 +30,21 @@ def player(request, playerid):
     # Render the response and send it back!
     return render(request, 'sabr/player.html', context_dict)
     
-def search_form(request):
-    return render(request, 'sabr/search_form.html')
+
     
     
 def search(request):
+    error = False
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
-        players = Master.objects.filter(namefirst__icontains=q) | Master.objects.filter(namelast__icontains=q )
-        return render(request, 'sabr/search_results.html',
-            {'players': players, 'query': q})
-    else:
-        return render(request, 'search_form.html', {'error': True})  
+        if not q:
+            error = True
+        else:
+            players = Master.objects.filter(namefirst__icontains=q) | Master.objects.filter(namelast__icontains=q )
+            return render(request, 'sabr/search_results.html',
+                {'players': players, 'query': q})
+    
+    return render(request, 'sabr/search_form.html', {'error': error})  
     
 # BAD!
 def bad_search(request):

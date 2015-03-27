@@ -25,6 +25,11 @@ class Master(models.Model):
     finalgame = models.DateTimeField(db_column='finalGame', blank=True, null=True)  # Field name made lowercase.
     retroid = models.CharField(db_column='retroID', max_length=9, blank=True)  # Field name made lowercase.
     bbrefid = models.CharField(db_column='bbrefID', max_length=9, blank=True)  # Field name made lowercase.
+    
+    def save(self, *args, **kwargs):
+        complete_name = '%s%s' % (self.namefirst, self.namelast)
+        self.complete_name = complete_name.replace(' ', '')
+        super(Master, self).save(*args, **kwargs)
 
     def __str__(self):              
         return self.playerid
