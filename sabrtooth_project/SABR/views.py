@@ -40,7 +40,7 @@ def search(request):
         if not q:
             error = True
         else:
-            players = Master.objects.filter(namefirst__icontains=q) | Master.objects.filter(namelast__icontains=q )
+            players = Master.objects.filter(player_fullname__icontains=q) 
             return render(request, 'sabr/search_results.html',
                 {'players': players, 'query': q})
     
