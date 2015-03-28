@@ -32,6 +32,7 @@ class Master(models.Model):
 
     def __str__(self):              
         return self.playerid
+                
     
     class Meta:
         #managed = False

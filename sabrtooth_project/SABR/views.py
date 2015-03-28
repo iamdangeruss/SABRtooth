@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from SABR.models import Master, Batting
 from SABR.forms import MasterForm
 
-
+import json
 
 
 
@@ -53,7 +53,30 @@ def bad_search(request):
     message = 'You searched for: %r' % request.GET['q']
     return HttpResponse(message)          
 
-    
+def get_players(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        players = Master.objects.filter(player_fullname__icontains=q) [:20]
+        results = []
+        for player in players:
+            if player.debut:
+            	startyear = str(player.debut.year)
+            else:
+            	startyear = ""
+            if player.finalgame:
+            	endyear = str(player.finalgame.year)
+            else:
+            	endyear = ""		
+            player_json = {}
+            player_json['id'] = player.playerid
+            player_json['label'] = player.player_fullname + " " + startyear + "-" + endyear
+            player_json['value'] = "/sabr/player/"+ player.playerid
+            results.append(player_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)    
     
 
     
