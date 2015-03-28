@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from SABR.models import Master, Batting, Pitching, Fielding
+from SABR.models import Master, Batting, Pitching, Fielding, Battingpost, Pitchingpost, Fieldingpost
 from SABR.forms import MasterForm
 
 import json
@@ -13,20 +13,19 @@ def index(request):
     
 def player(request, playerid):
     context_dict = {}
-    #player_list = Master.objects.order_by('namelast')[:25]
-    #batting_list = Batting.objects.order_by('yearid')[:25]
-    #context_dict = {'players': player_list,'battinglines': batting_list}
+    
     
     player = Master.objects.get(playerid=playerid)
-    #context_dict['player_name'] = player.namefirst
-    #context_dict = ['player'] = player
-    
-    
     batting_list = Batting.objects.filter(playerid=playerid)
     pitching_list = Pitching.objects.filter(playerid=playerid)
     fielding_list = Fielding.objects.filter(playerid=playerid)
+    battingPost_list = Battingpost.objects.filter(playerid=playerid)
+    fieldingPost_list = Fieldingpost.objects.filter(playerid=playerid)
+    pitchingPost_list = Pitchingpost.objects.filter(playerid=playerid)
+    
+    
         
-    context_dict = {'player': player,'battinglines': batting_list,'pitchinglines': pitching_list,'fieldinglines': fielding_list}
+    context_dict = {'player': player,'battinglines': batting_list,'pitchinglines': pitching_list,'fieldinglines': fielding_list,'battingpostlines': battingPost_list,'fieldingpostlines': fieldingPost_list,'pitchingpostlines': pitchingPost_list}
     
     # Render the response and send it back!
     return render(request, 'sabr/player.html', context_dict)

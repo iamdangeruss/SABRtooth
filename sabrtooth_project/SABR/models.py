@@ -64,6 +64,18 @@ class Batting(models.Model):
     gidp = models.IntegerField(db_column='GIDP', blank=True, null=True)  # Field name made lowercase.
     g_old = models.IntegerField(db_column='G_old', blank=True, null=True)  # Field name made lowercase.
     djangoid = models.IntegerField(db_column='djangoid', primary_key=True)
+    
+    #build out SABRmetrics here (best practice to build in DB?)
+    def netsteals(self):
+    	return self.sb - self.cs
+    	
+    def ba(self):
+    	return "{:.3f}".format(self.h / float(self.ab))
+    		
+    def obp(self):
+        #OBP = (H + BB + HBP) / (AB + BB + HBP + SF)
+    	return "{:.3f}".format((self.h + self.bb + self.hbp) / (float(self.ab) + self.bb + self.hbp + self.sf))	
+    	
 
     def __str__(self):              
         return self.playerid
@@ -132,5 +144,98 @@ class Fielding(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'Fielding'        
+        db_table = 'Fielding'
+        
+class Battingpost(models.Model):
+    yearid = models.IntegerField(db_column='yearID')  # Field name made lowercase.
+    round = models.CharField(max_length=10)
+    playerid = models.ForeignKey(Master)  # Field name made lowercase.
+    teamid = models.CharField(db_column='teamID', max_length=3, blank=True)  # Field name made lowercase.
+    lgid = models.CharField(db_column='lgID', max_length=2, blank=True)  # Field name made lowercase.
+    g = models.IntegerField(db_column='G', blank=True, null=True)  # Field name made lowercase.
+    ab = models.IntegerField(db_column='AB', blank=True, null=True)  # Field name made lowercase.
+    r = models.IntegerField(db_column='R', blank=True, null=True)  # Field name made lowercase.
+    h = models.IntegerField(db_column='H', blank=True, null=True)  # Field name made lowercase.
+    number_2b = models.IntegerField(db_column='2B', blank=True, null=True)  # Field name made lowercase. Field renamed because it wasn't a valid Python identifier.
+    number_3b = models.IntegerField(db_column='3B', blank=True, null=True)  # Field name made lowercase. Field renamed because it wasn't a valid Python identifier.
+    hr = models.IntegerField(db_column='HR', blank=True, null=True)  # Field name made lowercase.
+    rbi = models.IntegerField(db_column='RBI', blank=True, null=True)  # Field name made lowercase.
+    sb = models.IntegerField(db_column='SB', blank=True, null=True)  # Field name made lowercase.
+    cs = models.IntegerField(db_column='CS', blank=True, null=True)  # Field name made lowercase.
+    bb = models.IntegerField(db_column='BB', blank=True, null=True)  # Field name made lowercase.
+    so = models.IntegerField(db_column='SO', blank=True, null=True)  # Field name made lowercase.
+    ibb = models.IntegerField(db_column='IBB', blank=True, null=True)  # Field name made lowercase.
+    hbp = models.IntegerField(db_column='HBP', blank=True, null=True)  # Field name made lowercase.
+    sh = models.IntegerField(db_column='SH', blank=True, null=True)  # Field name made lowercase.
+    sf = models.IntegerField(db_column='SF', blank=True, null=True)  # Field name made lowercase.
+    gidp = models.IntegerField(db_column='GIDP', blank=True, null=True)  # Field name made lowercase.
+    djangoid = models.IntegerField(db_column='djangoid', primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'BattingPost'
+        
+class Fieldingpost(models.Model):
+    playerid = models.ForeignKey(Master)  # Field name made lowercase..
+    yearid = models.IntegerField(db_column='yearID')  # Field name made lowercase.
+    teamid = models.CharField(db_column='teamID', max_length=3, blank=True)  # Field name made lowercase.
+    lgid = models.CharField(db_column='lgID', max_length=2, blank=True)  # Field name made lowercase.
+    round = models.CharField(max_length=10)
+    pos = models.CharField(db_column='POS', max_length=2)  # Field name made lowercase.
+    g = models.IntegerField(db_column='G', blank=True, null=True)  # Field name made lowercase.
+    gs = models.IntegerField(db_column='GS', blank=True, null=True)  # Field name made lowercase.
+    innouts = models.IntegerField(db_column='InnOuts', blank=True, null=True)  # Field name made lowercase.
+    po = models.IntegerField(db_column='PO', blank=True, null=True)  # Field name made lowercase.
+    a = models.IntegerField(db_column='A', blank=True, null=True)  # Field name made lowercase.
+    e = models.IntegerField(db_column='E', blank=True, null=True)  # Field name made lowercase.
+    dp = models.IntegerField(db_column='DP', blank=True, null=True)  # Field name made lowercase.
+    tp = models.IntegerField(db_column='TP', blank=True, null=True)  # Field name made lowercase.
+    pb = models.IntegerField(db_column='PB', blank=True, null=True)  # Field name made lowercase.
+    sb = models.IntegerField(db_column='SB', blank=True, null=True)  # Field name made lowercase.
+    cs = models.IntegerField(db_column='CS', blank=True, null=True)  # Field name made lowercase.
+    djangoid = models.IntegerField(db_column='djangoid', primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'FieldingPost'
+        
+        
+class Pitchingpost(models.Model):
+    playerid = models.ForeignKey(Master)  # Field name made lowercase.
+    yearid = models.IntegerField(db_column='yearID')  # Field name made lowercase.
+    round = models.CharField(max_length=10)
+    teamid = models.CharField(db_column='teamID', max_length=3, blank=True)  # Field name made lowercase.
+    lgid = models.CharField(db_column='lgID', max_length=2, blank=True)  # Field name made lowercase.
+    w = models.IntegerField(db_column='W', blank=True, null=True)  # Field name made lowercase.
+    l = models.IntegerField(db_column='L', blank=True, null=True)  # Field name made lowercase.
+    g = models.IntegerField(db_column='G', blank=True, null=True)  # Field name made lowercase.
+    gs = models.IntegerField(db_column='GS', blank=True, null=True)  # Field name made lowercase.
+    cg = models.IntegerField(db_column='CG', blank=True, null=True)  # Field name made lowercase.
+    sho = models.IntegerField(db_column='SHO', blank=True, null=True)  # Field name made lowercase.
+    sv = models.IntegerField(db_column='SV', blank=True, null=True)  # Field name made lowercase.
+    ipouts = models.IntegerField(db_column='IPouts', blank=True, null=True)  # Field name made lowercase.
+    h = models.IntegerField(db_column='H', blank=True, null=True)  # Field name made lowercase.
+    er = models.IntegerField(db_column='ER', blank=True, null=True)  # Field name made lowercase.
+    hr = models.IntegerField(db_column='HR', blank=True, null=True)  # Field name made lowercase.
+    bb = models.IntegerField(db_column='BB', blank=True, null=True)  # Field name made lowercase.
+    so = models.IntegerField(db_column='SO', blank=True, null=True)  # Field name made lowercase.
+    baopp = models.FloatField(db_column='BAOpp', blank=True, null=True)  # Field name made lowercase.
+    era = models.FloatField(db_column='ERA', blank=True, null=True)  # Field name made lowercase.
+    ibb = models.IntegerField(db_column='IBB', blank=True, null=True)  # Field name made lowercase.
+    wp = models.IntegerField(db_column='WP', blank=True, null=True)  # Field name made lowercase.
+    hbp = models.IntegerField(db_column='HBP', blank=True, null=True)  # Field name made lowercase.
+    bk = models.IntegerField(db_column='BK', blank=True, null=True)  # Field name made lowercase.
+    bfp = models.IntegerField(db_column='BFP', blank=True, null=True)  # Field name made lowercase.
+    gf = models.IntegerField(db_column='GF', blank=True, null=True)  # Field name made lowercase.
+    r = models.IntegerField(db_column='R', blank=True, null=True)  # Field name made lowercase.
+    sh = models.IntegerField(db_column='SH', blank=True, null=True)  # Field name made lowercase.
+    sf = models.IntegerField(db_column='SF', blank=True, null=True)  # Field name made lowercase.
+    gidp = models.IntegerField(db_column='GIDP', blank=True, null=True)  # Field name made lowercase.
+    djangoid = models.IntegerField(db_column='djangoid', primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'PitchingPost'
+                
+                        
         
