@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from SABR.models import Master, Batting
+from SABR.models import Master, Batting, Pitching, Fielding
 from SABR.forms import MasterForm
 
 import json
@@ -23,9 +23,10 @@ def player(request, playerid):
     
     
     batting_list = Batting.objects.filter(playerid=playerid)
-    #context_dict = ['batting_list']= batting_list
-    
-    context_dict = {'player': player,'battinglines': batting_list}
+    pitching_list = Pitching.objects.filter(playerid=playerid)
+    fielding_list = Fielding.objects.filter(playerid=playerid)
+        
+    context_dict = {'player': player,'battinglines': batting_list,'pitchinglines': pitching_list,'fieldinglines': fielding_list}
     
     # Render the response and send it back!
     return render(request, 'sabr/player.html', context_dict)
