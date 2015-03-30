@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from SABR.models import Master, Batting, Pitching, Fielding, Battingpost, Pitchingpost, Fieldingpost
+from SABR.models import Master, Batting, Pitching, Fielding, Battingpost, Pitchingpost, Fieldingpost,Teamsfranchises,Teams,Technologies
+
 from SABR.forms import MasterForm
+import os.path
+ 
 
 import json
 
@@ -10,6 +13,13 @@ import json
 def index(request):
     
     return render(request, 'sabr/index.html')
+    
+def about(request):
+    
+    techs = Technologies.objects.all()
+    context_dict = {'techs':techs}
+    
+    return render(request, 'sabr/about.html',context_dict)    
     
 def player(request, playerid):
     context_dict = {}
@@ -22,6 +32,8 @@ def player(request, playerid):
     battingPost_list = Battingpost.objects.filter(playerid=playerid)
     fieldingPost_list = Fieldingpost.objects.filter(playerid=playerid)
     pitchingPost_list = Pitchingpost.objects.filter(playerid=playerid)
+    
+    
     
     
         

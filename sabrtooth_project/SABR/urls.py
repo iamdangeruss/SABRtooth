@@ -6,7 +6,8 @@ urlpatterns = patterns('',
         url(r'^player/(?P<playerid>[\w\-]+)/$', views.player, name='player'),
       #  url(r'^search-form/$', views.search_form),
         url(r'^search/$', views.search),
-        url(r'^api/get_players/', views.get_players, name='get_drugs'),
+        url(r'^api/get_players/', views.get_players, name='get_players'),
+        url(r'^about', views.about, name='about'),
        
        
         
